@@ -33,7 +33,7 @@ Caso exista a conta retorna HTTP STATUS 200 e um JSON:
 {“conta_id”: 1234, “saldo”: 200}
 
 # 
-**Etapas do desafio**:
+Etapas do desafio:
 Há três formas de transação disponíveis: débito, crédito e Pix, cada uma com taxas diferentes.
 Taxa de débito: 3% sobre a operação
 Taxa de crédito: 5% sobre a operação
