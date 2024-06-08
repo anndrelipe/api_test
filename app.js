@@ -7,6 +7,20 @@ app.get('/', (req, res) => {
   res.send('API funcionando, tente /conta ou /transacao!')
 })
 
+app.post('/transacao', (req, res) => {
+  const { forma_pagamento, conta_id, valor} = req.body
+
+  if (!forma_pagamento || !conta_id || !valor) {
+    res.status(404).send('Bad Request! Todos os parametros são obrigatórios! ')
+  } 
+
+    res.status(201).json({
+      conta_id: 1234, 
+      saldo: 189.70
+    })
+  }
+)
+
 app.post('/conta', (req, res) => {
 
   const { conta_id, valor } = req.body
