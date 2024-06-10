@@ -10,3 +10,16 @@ services:
       - ./:/app/
     working_dir: /app
     command: sh -c "npm run dev"
+
+  database:
+    image: mariadb:latest
+    container_name: database-dc
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
