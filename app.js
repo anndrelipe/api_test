@@ -25,9 +25,41 @@ db.connect(err => {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.get('/', (req, res) => {
   res.send('API funcionando, tente /conta ou /transacao!')
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.post('/transacao', (req, res) => {
   const { forma_pagamento, conta_id, valor} = req.body
@@ -43,15 +75,40 @@ app.post('/transacao', (req, res) => {
   }
 )
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.post('/conta', (req, res) => {
 
-  const { conta_id, valor } = req.body
-  
-    res.status(201).json({
-      conta_id: 1234,
-      saldo: 189.70
-    })
+  const { saldo } = req.body;
+  const query = `INSERT INTO conta (saldo) values (${saldo});`;
+
+  if (!saldo) {
+    res.status(400).json({mensagem : "Bad request, você precisa definir um saldo inicial para a conta."})
+    return
+  } 
+
+  db.query(query, function (err) {
+    if (err) {
+      res.status(500).json({mensagem : "Algo de errado aconteceu. Não foi possível cadastrar conta."})
+      return
+    }
+    res.status(201).json({mensagem : "Sucesso conta cadastrada."})
   })
+})
 
 
 app.get('/conta/:id', (req, res) => {
@@ -67,6 +124,20 @@ app.get('/conta/:id', (req, res) => {
   })
 
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   app.listen(port, () => {
