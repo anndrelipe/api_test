@@ -62,16 +62,44 @@ app.get('/', (req, res) => {
 
 
 app.post('/transacao', (req, res) => {
-  const { forma_pagamento, conta_id, valor} = req.body
+  const { forma_pagamento, conta_id, valor } = req.body
+
+  const query1 = `SELECT saldo FROM conta WHERE conta_id = ${conta_id};`;
+  
+  db.query(query1, (err, value) => {
+    if (err) {
+      throw err
+    }
+
+    let taxa
+    if (forma_pagamento.toUpperCase() === "D") {
+      taxa = 0.03
+    } else if (forma_pagamento.toUpperCase() === "C") {
+      taxa = 0.05
+    }
+
+    const result = value[0].saldo
+
+    db.query(`UPDATE conta SET saldo = ${result - (valor + (valor * taxa))} WHERE conta_id = ${conta_id}`, function (err) {
+      if (err) {
+        throw err
+      } 
+    })
+    
+  })
+
+  const query3 = `INSERT INTO hist_transacao (forma_pagamento, conta_id, valor) values ("${forma_pagamento}", ${conta_id}, ${valor});`
+
+  db.query(query3, (err) => {
+    if (err) {
+      throw err
+    } 
+    res.status(201).json({mensagem : "Transação realizada, valor sujeito a taxação mediante à forma de pagamento."})
+  })
 
   if (!forma_pagamento || !conta_id || !valor) {
     res.status(404).send('Bad Request! Todos os parametros são obrigatórios! ')
-  } 
-
-    res.status(201).json({
-      conta_id: 1234, 
-      saldo: 189.70
-    })
+  }   
   }
 )
 
